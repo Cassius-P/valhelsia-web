@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+  @apply pr-2; /* Color from the gray palette (bg-gray-700) */
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full; /* Color from the gray palette (bg-gray-600) and rounded ends */
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-500 my-2  rounded-full; /* Darker color from the gray palette */
+}
+
+/* Apply the scrollbar styles to elements with bg-gray-600 */
+.bg-gray-600 {
+  scrollbar-color: theme('colors.gray.600') theme('colors.gray.800'); /* For Firefox */
+}
+
+/*.canvas-container, .upper-canvas {
+  height: 100% !important;
+  width: 100% !important;
+}*/
+
