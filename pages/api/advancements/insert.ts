@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getConnection, SQLQuery} from "@/helpers/DBHelper";
+import {getConnection} from "@/helpers/DBHelper";
 
 interface AchievementID {
     id: string;
@@ -19,18 +19,16 @@ const handlePOST = async (req: NextApiRequest, res:NextApiResponse) => {
     // Get body
     const body = req.body;
     // Check if body is string array
-    console.log(body)
     if(Array.isArray(JSON.parse(body))) {
 
         const conn = await getConnection();
         await conn.beginTransaction()
         try {
             for (const item of JSON.parse(body) as Advancement[]) {
-                // Insert or update logic here
-                // You can use INSERT ... ON DUPLICATE KEY UPDATE if you have a unique constraint
+
                 const query= `INSERT INTO su_achievements (id, title, description, icon, parent_id, mod_id) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = ? ;`;
 
-                await conn.execute(query, [item.id, item.title, item.description != null ? item.description : null, item.icon != null ? item.icon : null, item.parent != null ? item.parent : null, item.modId, item.id])
+                await conn.execute(query, [item.id, item.title, item.description != null ? item.description : null, item.icon != null ? item.icon : null, item.parent_id != null ? item.parent_id : null, item.mod_id, item.id])
 
             }
 
