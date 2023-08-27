@@ -51,3 +51,74 @@ body {
   width: 100% !important;
 }*/
 
+
+.react-tooltip {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  will-change: opacity, visibility;
+  @apply bg-gray-700/60 text-white rounded-md px-2 py-1 text-sm font-semibold;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.arrow {
+  position: absolute;
+  background: inherit;
+}
+
+.noArrow {
+  display: none;
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.show {
+  visibility: visible;
+  opacity: var(--rt-opacity);
+}
+
+.arrow {
+  width: 8px;
+  height: 8px;
+}
+
+[class*='react-tooltip__place-top'] > .arrow {
+  transform: rotate(45deg);
+}
+
+[class*='react-tooltip__place-right'] > .arrow {
+  transform: rotate(135deg);
+}
+
+[class*='react-tooltip__place-bottom'] > .arrow {
+  transform: rotate(225deg);
+}
+
+[class*='react-tooltip__place-left'] > .arrow {
+  transform: rotate(315deg);
+}
+
+.text-shadow {
+  text-shadow:
+          -2px -2px 0 #000,
+          2px -2px 0 #000,
+          -2px 2px 0 #000,
+          2px 2px 0 #000;
+}
+.dark\:text-shadow {
+  text-shadow:
+          -1px -1px 0 #fff,
+          1px -1px 0 #fff,
+          -1px 1px 0 #fff,
+          1px 1px 0 #fff;
+}
+
