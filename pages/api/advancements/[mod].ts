@@ -17,7 +17,7 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
 
     try {
         const query = `SELECT
-    su_achievements.*,
+    a.*, 
     CASE
         WHEN COUNT(su_players.uid) = 0 THEN '[]'
         ELSE JSON_ARRAYAGG(
@@ -27,18 +27,19 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
                     )
             )
         END AS players
-FROM su_achievements
-         LEFT JOIN su_player_achievements ON su_achievements.id = su_player_achievements.achievement_id
+FROM su_achievements as a
+         LEFT JOIN su_player_achievements ON a.id = su_player_achievements.achievement_id
          LEFT JOIN su_players ON su_player_achievements.player_uid = su_players.uid
-WHERE su_achievements.mod_id = '${mod}'
-GROUP BY su_achievements.id;` ;
+WHERE a.mod_id = '${mod}'
+GROUP BY a.id;` ;
+
 
 
         const [rows] = await conn.execute(query);
 
         const tree = buildAdvancementTree(rows as Advancement[]);
 
-        res.status(200).json({ data : tree });
+        res.status(200).json({ data : rows as Advancement[] });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });
@@ -52,12 +53,13 @@ const  buildAdvancementTree = (advancements: Advancement[]) => {
     advancements.forEach(advancement => {
         map[advancement.id] = {
             name: advancement.title,
+            id: advancement.id,
             attributes: {
                 description: advancement.description,
                 icon: advancement.icon,
                 modId: advancement.mod_id,
                 parent_id: advancement.parent_id,
-                players: advancement.players.length > 0 ? JSON.parse(advancement.players) : []
+                players: advancement.players.length > 0 ? JSON.parse(advancement.players.toString()) : []
             }
         };
     });

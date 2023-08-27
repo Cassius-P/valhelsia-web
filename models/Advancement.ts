@@ -6,4 +6,5 @@ interface Advancement {
     parent_id: string
     mod_id: string
     players: Player[]
+    image_base64: string
 }

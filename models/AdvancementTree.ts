@@ -1,5 +1,6 @@
 export interface AdvancementTree {
     name: string;
+    id: string;
     hasParent?: boolean;
     children?: AdvancementTree[];
     attributes: { [key: string]: any };
