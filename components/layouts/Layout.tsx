@@ -1,12 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useUI } from "@/contexts/UIContext";
 import MainFrame from './MainFrame';
 import Modal from './Modal';
-import {Tooltip} from "react-tooltip";
-
-
-
-
 
 interface LayoutProps {
 	children: React.ReactNode;
@@ -20,8 +15,6 @@ const Layout = ({ children }: LayoutProps) => {
 		closeModal,
 		...props
 	}) => {
-
-		console.log("Props layout", props)
 
 		return  (
 			<Modal onClose={closeModal}>
@@ -37,20 +30,9 @@ const Layout = ({ children }: LayoutProps) => {
 		)
 	}
 
-	const { setModalView, openModal, closeModal, lightMode } = useUI();
-
-
-	useEffect(() => {
-		if(lightMode) {
-			document.documentElement.classList.remove('dark')
-		}else{
-			document.documentElement.classList.add('dark')
-		}
-	}, [lightMode]);
-
 
 	return (
-		<div className="bg-gray-100 dark:bg-gray-700 min-h-screen min-w-screen flex overflow-hidden">
+		<div className="ark:bg-gray-700 bg-light-gray-600 min-h-screen min-w-screen flex overflow-hidden dark:text-white text-gray-600">
 
 			<MainFrame>
 				{children}

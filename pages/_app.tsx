@@ -5,20 +5,22 @@ import Layout from "@/components/layouts/Layout";
 import {AdminProvider} from "@/contexts/AdminContext";
 import {ManagedUIContext} from "@/contexts/UIContext";
 import '../styles/globals.css'
+import {Tooltip} from "react-tooltip";
 function App({Component, pageProps}: AppProps) {
     return (
-        <ManagedUIContext>
-            <AdminProvider>
+            <ManagedUIContext>
+                <AdminProvider>
 
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-                <div id="portal">
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                    <div id="portal">
 
-                </div>
+                    </div>
+                    <Tooltip id={'general-tip'} className={'z-50'} disableStyleInjection={true}/>
 
-            </AdminProvider>
-        </ManagedUIContext>
+                </AdminProvider>
+            </ManagedUIContext>
     )
 }
 
