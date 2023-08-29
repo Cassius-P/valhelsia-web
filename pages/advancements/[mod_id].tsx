@@ -21,7 +21,6 @@ const Advancements = ({mod}: AdvancementsProps) => {
         }
     }, []);
 
-
     return (
         <div className="flex w-full h-full">
 

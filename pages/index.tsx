@@ -81,11 +81,6 @@ const Home = () => {
     }
 
 
-    useEffect(() => {
-
-    }, []);
-
-
 
 
     const handleIframeError = (event: any) => {
