@@ -1,6 +1,6 @@
 type ServerPlayer = {
-    uuid?: string;
-    name?: string;
+    uuid: string;
+    name: string;
     foreign?: boolean;
     position: {
         x: number;

@@ -24,18 +24,18 @@ const handlePOST = async (req: NextApiRequest, res:NextApiResponse) => {
         const conn = await getConnection();
         await conn.beginTransaction()
         try {
-            for (const item of JSON.parse(body) as Advancement[]) {
+            for (const item of JSON.parse(body) ) {
 
-                const query= `INSERT INTO su_achievements (id, title, description, icon, parent_id, mod_id) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = ? ;`;
+                const query= `INSERT INTO su_achievements_tmp (id, title, description, icon, parent_id, mod_id) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = ? ;`;
 
-                await conn.execute(query, [item.id, item.title, item.description != null ? item.description : null, item.icon != null ? item.icon : null, item.parent_id != null ? item.parent_id : null, item.mod_id, item.id])
+                await conn.execute(query, [item.id, item.title, item.description != null ? item.description : null, item.icon != null ? item.icon : null, item.parent != null ? item.parent : null, item.modId, item.id])
 
             }
 
             // Commit the transaction
             await conn.commit();
 
-            res.status(200).json({ success: true });
+            return res.status(200).json({ success: true });
         } catch (error) {
             // Rollback the transaction in case of an error
             await conn.rollback();
