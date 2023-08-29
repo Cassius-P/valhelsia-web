@@ -1,5 +1,5 @@
 
-import {CSSProperties, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {SquareLoader} from "react-spinners";
 import Image from "next/image";
 
@@ -58,7 +58,7 @@ const Home = () => {
 
         }
 
-
+        document.title = "Map"
     }, []);
 
 
@@ -91,15 +91,12 @@ const Home = () => {
     const handleIframeError = (event: any) => {
         console.error('Iframe failed to load:', event.toString());
     }
-     const handleIframeLoad = (event: any) => {
-        console.log('Iframe loaded:', event);
-     }
 
-     const handleError = (state:boolean) => {
-        setTimeout(() => {
-            setIsError(state)
-        }, 500)
-     }
+    const handleError = (state:boolean) => {
+    setTimeout(() => {
+        setIsError(state)
+    }, 500)
+    }
 
 
 

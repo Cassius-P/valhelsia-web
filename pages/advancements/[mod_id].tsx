@@ -3,9 +3,8 @@
 import React, {useEffect} from "react";
 import {useAdmin} from "@/contexts/AdminContext";
 import ModSidebar from "@/components/mods/ModSidebar";
-import {useRouter} from "next/router";
 import AdvancementTree from "@/components/advancements/AdvancementTree";
-import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from "next";
+import {GetServerSidePropsContext} from "next";
 import {getMod} from "@/helpers/APIHelper";
 
 type AdvancementsProps = {
@@ -18,6 +17,7 @@ const Advancements = ({mod}: AdvancementsProps) => {
     useEffect(() => {
         if(mod){
             setCurrentMod(mod)
+            document.title = `${mod.displayName} - Advancements`
         }
     }, []);
 
