@@ -2,6 +2,7 @@
 import React, {useEffect} from "react";
 import {useAdmin} from "@/contexts/AdminContext";
 import {cn} from "@/utils/Utils";
+import PlaceholderList from "@/components/mods/PlaceholderList";
 
 
 interface ModSidebarProps {
@@ -10,7 +11,7 @@ interface ModSidebarProps {
 const ModSidebar = ({mod_id}: ModSidebarProps) => {
 
     const {mods, fetchMods, setCurrentMod} = useAdmin()
-
+    const {} = useAdmin()
 
     useEffect( () => {
         fetchMods().then((r:any) => console.log("fetched mods"))
@@ -46,6 +47,12 @@ const ModSidebar = ({mod_id}: ModSidebarProps) => {
                         </div>
                     </div>
                 ))}
+
+                {(mods == null || mods.length == 0) && (
+                    <PlaceholderList/>
+                )}
+
+
             </div>
         </div>
     )

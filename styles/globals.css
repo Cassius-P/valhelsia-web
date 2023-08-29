@@ -122,3 +122,34 @@ body {
           1px 1px 0 #fff;
 }
 
+@keyframes loading {
+  0% {
+    @apply bg-light-gray-700 ;
+  }
+  50% {
+    @apply bg-light-gray-800;
+  }
+  100% {
+    @apply bg-light-gray-600;
+  }
+}
+@keyframes loading-dark {
+  0% {
+    background-color: #4a4a4a;
+  }
+  50% {
+    background-color: #5a5a5a;
+  }
+  100% {
+    background-color: #4a4a4a;
+  }
+}
+
+.animated-placeholder {
+  animation: loading 2s infinite alternate ease-in-out;
+}
+.dark .dark\:animated-placeholder {
+  animation: loading-dark 2s infinite alternate ease-in-out;
+}
+
+
