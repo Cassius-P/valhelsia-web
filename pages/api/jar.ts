@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(500).json({message: 'No GitHub token provided'});
     }
 
-    const result = fetch(
+    fetch(
         `https://api.github.com/repos/Cassius-P/ServerUtils/releases/latest`,
         {
             headers: {
@@ -35,7 +35,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })
         .catch((error) => {
             console.error('Error fetching GitHub release:', error);
+            return res.status(500).json({message: 'Error fetching GitHub release'});
         });
+
+    return res.status(404).json({message: 'No jar file found'})
 }
 
 export default handler;
