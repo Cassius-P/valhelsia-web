@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import React, {useEffect} from "react";
+import React from "react";
 import {useUI} from "@/contexts/UIContext";
 import {useAdmin} from "@/contexts/AdminContext";
 
