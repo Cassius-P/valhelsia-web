@@ -14,6 +14,8 @@ type AdminContextType = {
     findMod: (mod_id: string) => Promise<Mod | null>;
     advancements: Advancement[];
     fetchAdvancements: (mod_id: string) => void;
+    downloadUrl: string | null;
+    latestVersion: string | null;
 };
 
 export const AdminContext = createContext<AdminContextType | undefined>(undefined)
@@ -31,6 +33,10 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
 
     const [advancements, setAdvancements] = useState<Advancement[]>([])
 
+
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
+    const [latestVersion, setLatestVersion] = useState<string | null>(null)
+
     const fetchPlayers = async () => {
         const url = "/api/players";
         let res = await fetch(`${url}`);
@@ -41,13 +47,6 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
 
     const fetchMods = async () => {
 
-        /*const url = "/api/mods";
-        let res = await fetch(`${url}`);
-        const json = await res.json();
-
-
-        let modList: Mod[] = json.data[0] as Mod[];*/
-
         let modList = await getMods()
         setMods(modList);
         return modList;
@@ -55,20 +54,7 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
 
     const findMod = async (mod_id:string) => {
         console.log("Mods",mods)
-        /*if(mods == null){
 
-            fetchMods().then((modList) => {
-                console.log("ModList", modList)
-                let found = modList.find((mod:Mod) => mod.mod_id == mod_id)
-
-                console.log("Found",found)
-                return found
-            })
-
-            return undefined;
-        }
-
-        return mods.find((mod:Mod) => mod.mod_id == mod_id)*/
 
         let mod = await getMod(mod_id)
         if(mod == null || mod["error"]) {
@@ -86,9 +72,25 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
         setAdvancements(json.data as Advancement[]);
     }
 
+    const fectchLastJarURL = async () => {
+        fetch(`/api/jar`)
+            .then((response) => response.json())
+            .then((data: {version:string, url:string}) => {
+                // Assuming the asset is the first one in the list
+
+                setDownloadUrl(data.url);
+                setLatestVersion(data.version);
+            })
+            .catch((error) => {
+                console.error('Error fetching GitHub release:', error);
+            });
+    }
+
+
 
     useEffect(() => {
         fetchPlayers()
+        fectchLastJarURL()
     }, []);
 
     useEffect(() => {
@@ -111,7 +113,9 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
                 setCurrentMod,
                 findMod,
                 advancements,
-                fetchAdvancements
+                fetchAdvancements,
+                downloadUrl,
+                latestVersion
             }
         }>
             {children}

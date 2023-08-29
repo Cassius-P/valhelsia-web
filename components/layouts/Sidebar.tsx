@@ -3,10 +3,12 @@
 import Link from "next/link";
 import React, {useEffect} from "react";
 import {useUI} from "@/contexts/UIContext";
+import {useAdmin} from "@/contexts/AdminContext";
 
 const Sidebar = () => {
 
     const {lightMode, setTheme, mounted} = useUI()
+    const {downloadUrl, latestVersion} = useAdmin()
 
 
 
@@ -37,7 +39,18 @@ const Sidebar = () => {
                             </svg>
                         </Link>
                     </div>
+                    {downloadUrl && latestVersion &&(
+                        <div data-tooltip-id={'general-tip'} data-tooltip-place={'right'} data-tooltip-content={`ServerUtils ${latestVersion}`} className={'group'}>
+                            <Link href={downloadUrl} download={true}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
+                                </svg>
+                            </Link>
+                        </div>
+                    )}
                 </div>
+
+
                 <div>
                     {mounted && (
                         <button onClick={handleTheme} className={'group'}>
