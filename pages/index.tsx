@@ -3,7 +3,7 @@ import {CSSProperties, useEffect, useRef, useState} from "react";
 import {SquareLoader} from "react-spinners";
 import Image from "next/image";
 
-
+const URL = process.env.NEXT_PUBLIC_MAP_URL
 
 const Home = () => {
 
@@ -15,9 +15,31 @@ const Home = () => {
 
 
     useEffect(() => {
+
+        /*if(URL == null) {
+            handleError(true)
+            return;
+        }*/
+
         setTimeout(() =>{
             setIsLoading(false)
         }, 500)
+
+
+        /*const isUp = fetch(URL.toString(), {
+            method: 'GET',
+
+        }).then((r) => {
+            console.log(r)
+            if(r.status == 200){
+                handleError(false)
+            }else{
+                handleError(true)
+            }
+        }).catch((e) => {
+            console.log(e)
+            handleError(true)
+        })*/
 
 
         window.addEventListener("message", (event) => {
@@ -26,7 +48,7 @@ const Home = () => {
         });
 
         if(parentRef.current){
-            let parent = parentRef.current
+            let parent = parentRef.current as any
             if(parent != null){
 
                 parent.addEventListener('message', (event: MessageEvent) => {
@@ -49,41 +71,44 @@ const Home = () => {
             setIsError(true)
         }
 
-        console.log("Why is this not working", data.data.players)
 
         if(data.type == "markers" && data.data.players != null){
 
             if(data.data.players.length == 0 && players?.length == 0) return;
-            console.log("data", data)
             setPlayers([...data.data.players])
 
         }
     }
 
+
     useEffect(() => {
-        if(players){
-            console.log("players", players)
-        }
-    }, [players]);
+
+    }, []);
 
 
 
 
-    function handleIframeError(event: any) {
+    const handleIframeError = (event: any) => {
         console.error('Iframe failed to load:', event.toString());
     }
      const handleIframeLoad = (event: any) => {
-        console.log('Iframe loaded:', event.toString());
+        console.log('Iframe loaded:', event);
+     }
+
+     const handleError = (state:boolean) => {
+        setTimeout(() => {
+            setIsError(state)
+        }, 500)
      }
 
 
 
     return (
-    <div className={'flex w-full items-center grow justify-center relative'} ref={parentRef}>
+    <div className={'flex w-full items-center grow justify-center relative dark:bg-gray-600'} ref={parentRef}>
         {!isLoading && !isError && (
 
-            <iframe src={"http://146.59.177.169:30529"} className={'w-full h-full'}  onLoad={handleIframeLoad}
-                    onError={handleIframeError} name={Date.now().toString()} onMessa/>
+            <iframe src={"http://146.59.177.169:30528"} className={'w-full h-full'}
+                    onError={handleIframeError} name={Date.now().toString()}/>
         )}
         {isError && (
             <span className={"dark:text-white"}>
