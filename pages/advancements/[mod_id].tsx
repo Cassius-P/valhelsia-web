@@ -13,9 +13,7 @@ type AdvancementsProps = {
 }
 const Advancements = ({mod}: AdvancementsProps) => {
 
-
-    const router = useRouter();
-    const {currentMod, setCurrentMod, findMod, mods} = useAdmin()
+    const {setCurrentMod} = useAdmin()
 
     useEffect(() => {
         if(mod){
