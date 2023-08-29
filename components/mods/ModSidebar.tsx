@@ -14,7 +14,7 @@ const ModSidebar = ({mod_id}: ModSidebarProps) => {
     const {} = useAdmin()
 
     useEffect( () => {
-        fetchMods().then((r:any) => console.log("fetched mods"))
+        fetchMods().then(() => console.log("Fetched mods"))
     }, []);
 
     const handleClick = (mod:Mod) => {

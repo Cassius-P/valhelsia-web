@@ -3,7 +3,6 @@ import Sidebar from "@/components/layouts/Sidebar";
 
 export default function MainFrame({ children }: { children: ReactNode }) {
 
- ;
 
     return (
         <>
