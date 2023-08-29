@@ -30,7 +30,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
         console.log(`Players of \r${advancement.title}`, advancement.players)
         if(advancement.players && advancement.players.length > 0) {
             let content = ''
-            for(let player of JSON.parse(advancement.players)) {
+            for(let player of JSON.parse(advancement.players.toString())) {
 
                 console.log("player", player)
                 if(player.player_uid == null) continue;
@@ -83,7 +83,9 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
     useEffect(() => {
         const svgElement = ref.current;
         if (svgElement) {
+            // @ts-ignore
             const width = svgElement.clientWidth;
+            // @ts-ignore
             const height = svgElement.clientHeight;
             let currentTreeId: string | null = null;
 
@@ -110,15 +112,22 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
 
 
             const dragstarted = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement) => {
+                // @ts-ignore
                 currentTreeId = d.treeId;
                 if (!event.active) simulation.alphaTarget(0.1).restart();
+                // @ts-ignore
                 d.fx = d.x;
+                // @ts-ignore
                 d.fy = d.y;
             }
 
             const dragged = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement) => {
+
+                // @ts-ignore
                 if (d.treeId === currentTreeId) {
+                    // @ts-ignore
                     d.fx = event.x;
+                    // @ts-ignore
                     d.fy = event.y;
                 }
             }
@@ -126,7 +135,9 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
             const dragended = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement)=> {
                 currentTreeId = null;
                 if (!event.active) simulation.alphaTarget(0).restart();
+                // @ts-ignore
                 d.fx = null;
+                // @ts-ignore
                 d.fy = null;
             }
 
@@ -152,7 +163,10 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
                     }
                 });
 
+            // @ts-ignore
             svg.call(zoom).style('cursor', 'grab');
+
+            // @ts-ignore
             svg.call(zoom.transform, d3.zoomIdentity.scale(0.6));
 
             const nodeById = new Map(trees.map((node) => [node.id, node]));
@@ -161,7 +175,10 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
                 .map((t) => ({ source: nodeById.get(t.parent_id), target: nodeById.get(t.id) }))
                 .filter((link) => link.source && link.target);
 
+            // @ts-ignore
             const simulation = d3.forceSimulation(trees)
+
+                // @ts-ignore
                 .force('link', d3.forceLink(links).id((d) => d.id).distance(120))
                 .force('charge', d3.forceManyBody().strength(-200))
                 .force('center', d3.forceCenter(width / 2, height / 2))
@@ -187,14 +204,22 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
                 .call(drag);;
 
             simulation.on('tick', () => {
+
                 link
+
+                    // @ts-ignore
                     .attr('x1', (d) => d.source.x)
+                    // @ts-ignore
                     .attr('y1', (d) => d.source.y)
+                    // @ts-ignore
                     .attr('x2', (d) => d.target.x)
+                    // @ts-ignore
                     .attr('y2', (d) => d.target.y);
 
                 node
+                    // @ts-ignore
                     .attr('x', (d) => d.x - 125)
+                    // @ts-ignore
                     .attr('y', (d) => d.y - 125);
             });
         }
