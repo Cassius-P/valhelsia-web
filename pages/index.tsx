@@ -16,10 +16,10 @@ const Home = () => {
 
     useEffect(() => {
 
-        /*if(URL == null) {
+        if(URL == null) {
             handleError(true)
             return;
-        }*/
+        }
 
         setTimeout(() =>{
             setIsLoading(false)
@@ -107,7 +107,7 @@ const Home = () => {
     <div className={'flex w-full items-center grow justify-center relative dark:bg-gray-600'} ref={parentRef}>
         {!isLoading && !isError && (
 
-            <iframe src={"http://146.59.177.169:30528"} className={'w-full h-full'}
+            <iframe src={URL} className={'w-full h-full'}
                     onError={handleIframeError} name={Date.now().toString()}/>
         )}
         {isError && (
