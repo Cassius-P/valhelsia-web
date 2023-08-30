@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import {useUI} from "@/contexts/UIContext";
 import {D3DragEvent} from "d3";
 
 
