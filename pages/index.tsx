@@ -11,7 +11,9 @@ const Home = () => {
     const [isError, setIsError] = useState<boolean>(false)
 
     const iframeRef = useRef<HTMLIFrameElement>(null)
+    const [mapInitialized, setMapInitialized] = useState<boolean>(false)
     const {lightMode} = useUI()
+
 
 
 
@@ -29,14 +31,21 @@ const Home = () => {
 
 
         document.title = "Map"
+
+        window.addEventListener('message', messageHandler);
+
     }, []);
 
     useEffect(() => {
         sendIframeMessage()
-    }, [lightMode]);
+    }, [lightMode, mapInitialized]);
 
 
-
+    const messageHandler = (event: any) => {
+        if (event.data === "VueAppReady") {
+            setMapInitialized(true)
+        }
+    }
 
 
     const handleIframeError = (event: any) => {
@@ -65,7 +74,7 @@ const Home = () => {
         {!isLoading && !isError && (
 
             <iframe src={URL} className={'w-full h-full'}
-                    onError={handleIframeError} ref={iframeRef} onLoad={sendIframeMessage}/>
+                    onError={handleIframeError} ref={iframeRef}/>
         )}
         {isError && (
             <span className={"dark:text-white"}>
