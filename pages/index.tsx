@@ -1,7 +1,6 @@
 
 import {useEffect, useRef, useState} from "react";
 import {SquareLoader} from "react-spinners";
-import Image from "next/image";
 import {useUI} from "@/contexts/UIContext";
 
 const URL = process.env.NEXT_PUBLIC_MAP_URL
@@ -50,9 +49,6 @@ const Home = () => {
         }, 500)
     }
 
-    const handleLoad = (event: any) => {
-        sendIframeMessage()
-    }
 
     const sendIframeMessage = () => {
         if(iframeRef.current){
@@ -69,7 +65,7 @@ const Home = () => {
         {!isLoading && !isError && (
 
             <iframe src={URL} className={'w-full h-full'}
-                    onError={handleIframeError} ref={iframeRef} onLoad={handleLoad}/>
+                    onError={handleIframeError} ref={iframeRef} onLoad={sendIframeMessage}/>
         )}
         {isError && (
             <span className={"dark:text-white"}>

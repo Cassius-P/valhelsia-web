@@ -52,7 +52,6 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
     }
 
     const findMod = async (mod_id:string) => {
-        console.log("Mods",mods)
 
 
         let mod = await getMod(mod_id)

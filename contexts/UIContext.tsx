@@ -1,4 +1,4 @@
-import React, {HTMLProps, useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { createContext, FC, ReactNode } from "react";
 
 export interface UIState {
@@ -59,8 +59,7 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
 
 
   const openModal = useCallback(
-    ({...props}:any) => {
-        console.log('openModal', props)
+    () => {
       dispatch({type: "OPEN_MODAL"})
     },
     [dispatch]
@@ -80,14 +79,9 @@ export const UIProvider: FC<{ children?: ReactNode }> = (props) => {
 
 
   const getInitialLightTheme = () => {
-    console.log('getInitialLightTheme')
     if(typeof window !== "undefined"){
-      if(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        console.log('dark')
-        return false
-      }
-      console.log('light')
-      return true
+      return !(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
     }
     return true
   }

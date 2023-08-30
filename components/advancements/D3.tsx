@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import {useUI} from "@/contexts/UIContext";
-import Image from "next/image";
 import {D3DragEvent} from "d3";
 
 
@@ -14,7 +13,6 @@ type TreeComponentProps = {
 
 const D3: React.FC<TreeComponentProps> = ({ trees }) => {
     const ref = useRef(null);
-    const { lightMode } = useUI();
     const getNodeHTML = (advancement: Advancement) => {
         let nodeColor = 'bg-light-gray-600 dark:bg-gray-600 hover:bg-light-gray-800 hover:dark:bg-gray-700';
         if(!advancement.parent_id) {
@@ -27,18 +25,15 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
 
 
 
-        console.log(`Players of \r${advancement.title}`, advancement.players)
         if(advancement.players && advancement.players.length > 0) {
             let content = ''
             for(let player of JSON.parse(advancement.players.toString())) {
 
-                console.log("player", player)
                 if(player.player_uid == null) continue;
-                content += `<img class="aspect-square h-6" src="https://crafatar.com/avatars/${player.player_uid}"/>`
+                content += `<img class="aspect-square h-6" src="https://crafatar.com/avatars/${player.player_uid}" alt={player.player_uid}/>`
             }
 
             if(content !== '') {
-                console.log("content", content)
                 playerNode = `<div class="flex justify-around h-6 w-full p-2 absolute -bottom-6">${content}</div>`
             }
 
@@ -201,7 +196,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
                 .attr('width', 250)
                 .attr('height', 250)
                 .html(d => getNodeHTML(d))
-                .call(drag);;
+                .call(drag);
 
             simulation.on('tick', () => {
 

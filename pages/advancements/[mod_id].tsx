@@ -64,7 +64,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
 
     const mod = await getMod(mod_id.toString())
-    console.log("Mod from GSSP", mod)
     if(mod == null || mod.error) {
 
         return {

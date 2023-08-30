@@ -49,7 +49,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
-    require('@tailwindcss/line-clamp'),
     require('tailwind-scrollbar')({ nocompatible: true }),
     function ({ addBase, theme }) {
       addBase({
