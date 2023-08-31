@@ -13,7 +13,7 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
     const conn = await getConnection();
 
     try {
-        const query = `SELECT mod_id, displayName, description FROM su_mods;` ;
+        const query = `SELECT mod_id, displayName, description FROM su_mods ORDER BY displayName;` ;
         const data= await conn.execute(query);
         res.status(200).json({ data });
     } catch (error) {
