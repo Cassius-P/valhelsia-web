@@ -33,8 +33,8 @@ const insertAchievement = async (playerUUID: string, advancementId: string) => {
     try {
         await conn.beginTransaction();
         const query =
-            "INSERT INTO su_player_achievements (player_uid, achievement_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE player_uid = ? ;";
-        await conn.execute(query, [playerUUID, advancementId, playerUUID]);
+            "INSERT INTO su_player_achievements (player_uid, achievement_id, created_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE player_uid = ? ;";
+        await conn.execute(query, [playerUUID, advancementId, new Date(), playerUUID]);
         await conn.commit();
     } catch (error) {
         await conn.rollback(); // Roll back the transaction if an error occurs

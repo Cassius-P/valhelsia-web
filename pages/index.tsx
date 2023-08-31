@@ -73,7 +73,7 @@ const Home = () => {
     <div className={'flex w-full items-center grow justify-center relative dark:bg-gray-600'}>
         {!isLoading && !isError && (
 
-            <iframe src={URL} className={'w-full h-full'}
+            <iframe src={URL +"?random=" + (new Date()).getTime() + Math.floor(Math.random() * 1000000)} className={'w-full h-full'}
                     onError={handleIframeError} ref={iframeRef}/>
         )}
         {isError && (
