@@ -42,7 +42,7 @@ const ModSidebar = ({mod_id}: ModSidebarProps) => {
                                 onClick={() => handleClick(mod)}
                         >
                             <span className={'bg-origin-content bg-center bg-no-repeat bg-contain w-full aspect-square rounded-full'}
-                                  style={{backgroundImage: `url(data:image/png;base64,${mod.image_base64})`}}>
+                                  style={{backgroundImage: `url(https://cassiusbucket.s3.eu-west-3.amazonaws.com/minecraft/mods/${mod.mod_id}.png)`}}>
                             </span>
                         </div>
                     </div>
