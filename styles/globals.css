@@ -144,12 +144,31 @@ body {
     background-color: #4a4a4a;
   }
 }
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.bounce {
+  animation: bounce 1s infinite alternate;
+}
 
 .animated-placeholder {
   animation: loading 2s infinite alternate ease-in-out;
 }
 .dark .dark\:animated-placeholder {
   animation: loading-dark 2s infinite alternate ease-in-out;
+}
+
+.a-delay-150 {
+  animation-delay: 0.15s;
+}
+
+.a-delay-300 {
+  animation-delay: 0.3s;
 }
 
 

@@ -2,6 +2,7 @@
 import {useEffect, useRef, useState} from "react";
 import {SquareLoader} from "react-spinners";
 import {useUI} from "@/contexts/UIContext";
+import Link from "next/link";
 
 const URL = process.env.NEXT_PUBLIC_MAP_URL
 
@@ -25,9 +26,20 @@ const Home = () => {
             return;
         }
 
+        fetch(URL).then((response) => {
+            if (!response.ok) {
+                handleError(true)
+            }
+        }).catch((error) => {
+            handleError(true)
+        });
+
+
         setTimeout(() =>{
             setIsLoading(false)
         }, 500)
+
+
 
 
         document.title = "Map"
@@ -77,9 +89,25 @@ const Home = () => {
                     onError={handleIframeError} ref={iframeRef}/>
         )}
         {isError && (
-            <span className={"dark:text-white"}>
-                Erreur
-            </span>
+            <div className={"dark:text-white flex flex-col text-center"}>
+                <span className={'font-semibold text-6xl relative'}>
+                    Uh oh
+                    <span className={'a-delay-150 bounce inline-block'}>
+                        .
+                    </span>
+                    <span className={'a-delay-500 bounce inline-block'}>
+                        .
+                    </span>
+                </span>
+                <span className={'dark:text-light-gray-900'}>
+                    Something went wrong. Please try again later.
+                </span>
+
+                <Link href={'/#'} className={'underline text-blue-500 hover:cursor'}>
+                    Try again
+                </Link>
+
+            </div>
         )}
         {isLoading && (
             <SquareLoader
