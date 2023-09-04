@@ -6,7 +6,7 @@ import {AdminProvider} from "@/contexts/AdminContext";
 import {ManagedUIContext} from "@/contexts/UIContext";
 import '../styles/globals.css'
 import {Tooltip} from "react-tooltip";
-import {KeyboardContext, KeyboardHandler} from "@/contexts/KeyboardContext";
+import {KeyboardHandler} from "@/contexts/KeyboardContext";
 function App({Component, pageProps}: AppProps) {
 
 

@@ -1,7 +1,6 @@
 import {useAdmin} from "@/contexts/AdminContext";
 import React, {useEffect, useState} from "react";
 import D3 from "@/components/advancements/D3";
-import {useRouter} from "next/router";
 
 interface AdvancementTreeProps {
     mod: Mod

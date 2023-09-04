@@ -1,9 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {getConnection} from "@/helpers/DBHelper";
 
-interface AchievementID {
-    id: string;
-}
+
 
 const handler = async (req: NextApiRequest, res:NextApiResponse) => {
 

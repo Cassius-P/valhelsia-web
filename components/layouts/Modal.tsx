@@ -1,7 +1,6 @@
 import { useUI } from "@/contexts/UIContext";
 import ReactPortal from "./ReactPortal";
 import {cn} from "@/utils/Utils";
-import {style} from "d3";
 import {useEffect} from "react";
 
 interface ModalProps {
@@ -11,7 +10,7 @@ interface ModalProps {
 }
 
 function Modal({
-  children, style, onClose
+  children, style
 }: ModalProps) {
   const { displayModal } = useUI();
 

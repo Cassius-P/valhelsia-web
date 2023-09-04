@@ -11,7 +11,7 @@ interface ModSidebarProps {
 }
 const ModSidebar = ({mod_id}: ModSidebarProps) => {
 
-    const {mods, fetchMods, setCurrentMod} = useAdmin()
+    const {mods, fetchMods} = useAdmin()
     const {} = useAdmin()
 
     useEffect( () => {

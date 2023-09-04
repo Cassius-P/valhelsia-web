@@ -1,6 +1,5 @@
 import {createContext, ReactNode, useContext, useEffect} from "react";
 import {useUI} from "@/contexts/UIContext";
-import Mousetrap from "mousetrap"
 import {registerShortcuts} from "@/utils/KeyboardShortcutHandler";
 
 export const KeyboardContext = createContext<any>({})

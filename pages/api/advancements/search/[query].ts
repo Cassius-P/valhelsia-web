@@ -35,38 +35,4 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
     }
 }
 
-const  buildAdvancementTree = (advancements: Advancement[]) => {
-    const map: { [key: string]: AdvancementTree } = {};
-
-    // Create a map of AdvancementTree objects and initialize children arrays
-    advancements.forEach(advancement => {
-        map[advancement.id] = {
-            name: advancement.title,
-            id: advancement.id,
-            attributes: {
-                description: advancement.description,
-                icon: advancement.icon,
-                modId: advancement.mod_id,
-                parent_id: advancement.parent_id,
-                players: advancement.players.length > 0 ? JSON.parse(advancement.players.toString()) : []
-            }
-        };
-    });
-
-    // Build the tree structure by linking children to their parents
-    const roots: AdvancementTree[] = [];
-    advancements.forEach(advancement => {
-        const node = map[advancement.id];
-        if (advancement.parent_id && map[advancement.parent_id]) {
-            const parent = map[advancement.parent_id];
-            parent.children = parent.children || [];
-            parent.children.push(node);
-        } else {
-            roots.push(node);
-        }
-    });
-
-    return roots;
-}
-
 export default handler;

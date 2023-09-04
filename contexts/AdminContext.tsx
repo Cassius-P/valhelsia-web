@@ -23,8 +23,6 @@ AdminContext.displayName = "AdminContext";
 
 export const AdminProvider= ({children} : {children:ReactNode}) => {
 
-    const router = useRouter()
-
     const [players, setPlayers] = useState<any>([])
 
     const [mods, setMods] = useState<Mod[] | null>(null)
