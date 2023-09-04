@@ -172,3 +172,19 @@ body {
 }
 
 
+.animate-border {
+  border: 4px solid transparent;
+  animation: border-animation 0.8s ease-in-out 7;
+}
+
+@keyframes border-animation {
+  0%, 100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
+
+

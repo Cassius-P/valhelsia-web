@@ -1,16 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import {D3DragEvent} from "d3";
+import {cn} from "@/utils/Utils";
 
 
 
 type TreeComponentProps = {
     trees: Advancement[];
+    targetID: string | null;
 };
 
 
 
-const D3: React.FC<TreeComponentProps> = ({ trees }) => {
+const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
     const ref = useRef(null);
     const getNodeHTML = (advancement: Advancement) => {
         let nodeColor = 'bg-light-gray-600 dark:bg-gray-600 hover:bg-light-gray-800 hover:dark:bg-gray-700';
@@ -60,10 +62,12 @@ const D3: React.FC<TreeComponentProps> = ({ trees }) => {
                         </div>
                     </div>`;
 
-// ...
+
 
         return `<div class="h-full w-full flex justify-center items-center  relative px-10 ">
-            <div class="w-full aspect-square rounded-full flex justify-center items-center relative p-4 transition-all cursor-help  ${nodeColor}" 
+            <div id='${advancement.id}' class="${cn('w-full aspect-square rounded-full flex justify-center items-center relative p-4 transition-all cursor-help', nodeColor, {
+                'animate-border': targetID == advancement.id,
+        })}" 
             data-tooltip-id='general-tip' 
             data-tooltip-html='${tooltipHtml}'>
                 <span class="whitespace-normal w-full text-center font-semibold text-xl ">
