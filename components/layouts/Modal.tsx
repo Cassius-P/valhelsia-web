@@ -1,40 +1,62 @@
 import { useUI } from "@/contexts/UIContext";
 import ReactPortal from "./ReactPortal";
+import {cn} from "@/utils/Utils";
+import {style} from "d3";
+import {useEffect} from "react";
 
 interface ModalProps {
   children: React.ReactNode;
   onClose: () => void;
+  style?: "transparent" | "opaque"
 }
 
 function Modal({
-  children
+  children, style, onClose
 }: ModalProps) {
   const { displayModal } = useUI();
+
 
   const handleInsideClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   }
 
+    useEffect(() => {
+        if(style == null) style = "opaque"
+    }, []);
 
 
 
   return (
     <ReactPortal>
 
-        <div className={`block relative z-20 ${displayModal ? "opacity-100 prevent-scroll" : "opacity-0 pointer-events-none"} transition-all ease-in-out duration-300 delay-100`}>
-            <div className={`fixed inset-0 ${displayModal ? "bg-black/50" : "bg-transparent"} transition-all ease-in-out duration-300 delay-100`} />
+        <div  className={`block relative z-20 ${displayModal ? "opacity-100 prevent-scroll" : "opacity-0 pointer-events-none"} transition-all ease-in-out duration-300 delay-100`}>
+
+
+            <div className={cn(
+                `fixed inset-0 transition-all ease-in-out duration-300 delay-100 bg-transparent`,
+                {
+                    "bg-black/50": displayModal && style === "opaque",
+                    "bg-black/10": displayModal && style === "transparent",
+                }
+            )} />
+
 
             <div className={`fixed inset-0 flex items-center justify-center ${displayModal ? "m-0" : "mt-24"} transition-all ease-in-out duration-300 delay-100`}>
 
-              <div className="shadow-2xl bg-white dark:bg-gray-800 bg-light-gray-800 dark:text-white text-black rounded-lg transition-all ease-in-out duration-300 p-4 w-4/5 sm:w-3/5 lg:w-1/3 xl:w-1/4  2xl:1/5"
+              <div className={cn(
+                  "shadow-2xl dark:text-white text-black rounded-lg transition-all duration-300 backdrop-blur-sm  min-w-fit w-full md:w-1/3 lg:w-1/4 xl:w-2/5 2xl:w-2/6",
+                          {
+                              "dark:bg-gray-800 bg-light-gray-800 backdrop-filter-none" :style === "opaque",
+                              "dark:bg-gray-800/70 bg-light-gray-400/60 ": style === "transparent",
+                          })
+              }
                    onClick={handleInsideClick}>
-                <div>
                   {children}
-                </div>
               </div>
 
             </div>
         </div>
+
     </ReactPortal>
   )
 }

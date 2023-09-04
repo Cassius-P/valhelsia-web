@@ -2,6 +2,7 @@ import React from 'react';
 import { useUI } from "@/contexts/UIContext";
 import MainFrame from './MainFrame';
 import Modal from './Modal';
+import SearchModal from "@/components/modals/SearchModal";
 
 interface LayoutProps {
 	children: React.ReactNode;
@@ -10,30 +11,21 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
 
 
-	const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({
-		modalView,
-		closeModal,
-		...props
-	}) => {
 
-		return  (
-			<Modal onClose={closeModal}>
-				<p>test</p>
-			</Modal>
-		)
-	}
 
 	const ModalUI: React.FC = () => {
-		const { closeModal, modalView } = useUI()
+		const { closeModal, modalView, displayModal } = useUI()
 		return (
-			<ModalView modalView={modalView} closeModal={closeModal} />
+
+					<Modal onClose={closeModal} style={modalView == "SEARCH" ? "transparent" : "opaque"}>
+						{modalView === "SEARCH" && <SearchModal />}
+					</Modal>
 		)
 	}
 
 
 	return (
-		<div className="ark:bg-gray-700 bg-light-gray-600 min-h-screen min-w-screen flex overflow-hidden dark:text-white text-gray-600">
-
+		<div className="dark:bg-gray-700 bg-light-gray-600 min-h-screen min-w-screen flex overflow-hidden dark:text-white text-gray-600">
 			<MainFrame>
 				{children}
 			</MainFrame>
