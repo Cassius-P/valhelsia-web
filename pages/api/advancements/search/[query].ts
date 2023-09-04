@@ -1,6 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {getConnection} from "@/helpers/DBHelper";
-import {AdvancementTree} from "@/models/AdvancementTree";
 
 const handler = async (req:NextApiRequest, res:NextApiResponse) => {
     if(req.method === 'GET') {

@@ -1,5 +1,4 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {useRouter} from "next/router";
 import {getMod, getMods} from "@/helpers/APIHelper";
 
 
