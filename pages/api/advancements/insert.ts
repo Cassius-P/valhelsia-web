@@ -44,7 +44,6 @@ const handlePOST = async (req: NextApiRequest, res:NextApiResponse) => {
             return res.status(500).json({ error: 'An error occurred' });
         } finally {
             await conn.end();
-
         }
     }
 

@@ -15,7 +15,9 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
     try {
         const query = `SELECT mod_id, displayName, description FROM su_mods ORDER BY displayName;` ;
         const data= await conn.execute(query);
-        res.status(200).json({ data });
+
+        conn.end()
+        return res.status(200).json({ data });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });

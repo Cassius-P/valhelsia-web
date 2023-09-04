@@ -17,75 +17,39 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
 
     try {
         const query = `SELECT 
-    a.*,
-    CASE 
-        WHEN COUNT(su_players.uid) = 0 THEN '[]'
-        ELSE CONCAT('[', 
-            GROUP_CONCAT(
-                CONCAT(
-                    '{\"player_uid\":\"', su_players.uid, 
-                    '\", \"player_name\":\"', su_players.name, '\"}'
-                )
-            ), 
-            ']'
-        )
-    END AS players
-FROM 
-    su_achievements as a
-LEFT JOIN 
-    su_player_achievements ON a.id = su_player_achievements.achievement_id
-LEFT JOIN 
-    su_players ON su_player_achievements.player_uid = su_players.uid
-WHERE 
-    a.mod_id = '${mod}'
-GROUP BY 
-    a.id;` ;
+                                a.*,
+                                CASE 
+                                    WHEN COUNT(su_players.uid) = 0 THEN '[]'
+                                    ELSE CONCAT('[', 
+                                        GROUP_CONCAT(
+                                            CONCAT(
+                                                '{\"player_uid\":\"', su_players.uid, 
+                                                '\", \"player_name\":\"', su_players.name, '\"}'
+                                            )
+                                        ), 
+                                        ']'
+                                    )
+                                END AS players
+                            FROM 
+                                su_achievements as a
+                            LEFT JOIN 
+                                su_player_achievements ON a.id = su_player_achievements.achievement_id
+                            LEFT JOIN 
+                                su_players ON su_player_achievements.player_uid = su_players.uid
+                            WHERE 
+                                a.mod_id = '${mod}'
+                            GROUP BY 
+                                a.id;` ;
 
 
 
         const [rows] = await conn.execute(query);
-
-        const tree = buildAdvancementTree(rows as Advancement[]);
-
-        res.status(200).json({ data : rows as Advancement[] });
+        conn.end()
+        return res.status(200).json({ data : rows as Advancement[] });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });
     }
-}
-
-const  buildAdvancementTree = (advancements: Advancement[]) => {
-    const map: { [key: string]: AdvancementTree } = {};
-
-    // Create a map of AdvancementTree objects and initialize children arrays
-    advancements.forEach(advancement => {
-        map[advancement.id] = {
-            name: advancement.title,
-            id: advancement.id,
-            attributes: {
-                description: advancement.description,
-                icon: advancement.icon,
-                modId: advancement.mod_id,
-                parent_id: advancement.parent_id,
-                players: advancement.players.length > 0 ? JSON.parse(advancement.players.toString()) : []
-            }
-        };
-    });
-
-    // Build the tree structure by linking children to their parents
-    const roots: AdvancementTree[] = [];
-    advancements.forEach(advancement => {
-        const node = map[advancement.id];
-        if (advancement.parent_id && map[advancement.parent_id]) {
-            const parent = map[advancement.parent_id];
-            parent.children = parent.children || [];
-            parent.children.push(node);
-        } else {
-            roots.push(node);
-        }
-    });
-
-    return roots;
 }
 
 export default handler;
