@@ -1,5 +1,3 @@
-"use client"
-
 import React, {useEffect, useState} from "react";
 import {useAdmin} from "@/contexts/AdminContext";
 import ModSidebar from "@/components/mods/ModSidebar";
@@ -7,6 +5,7 @@ import AdvancementTree from "@/components/advancements/AdvancementTree";
 import {GetServerSidePropsContext} from "next";
 import {getMod} from "@/helpers/APIHelper";
 import {useRouter} from "next/router";
+import {Mod} from "@prisma/client";
 
 type AdvancementsProps = {
     mod: Mod

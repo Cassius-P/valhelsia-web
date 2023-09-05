@@ -1,19 +1,18 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {getMod, getMods} from "@/helpers/APIHelper";
+import {Achievement, Mod} from "@prisma/client";
 
 
 
 type AdminContextType = {
-    players: any[];
-    mods: Mod[] | null;
     fetchMods: () => Promise<Mod[]>;
     currentMod: Mod | null;
     setCurrentMod: (mod: Mod | null) => void;
     findMod: (mod_id: string) => Promise<Mod | null>;
-    fetchAdvancements: (mod_id: string) => Promise<Advancement[]>;
+    fetchAdvancements: (mod_id: string) => Promise<Achievement[]>;
     downloadUrl: string | null;
     latestVersion: string | null;
-    searchAdvancementQuery: (query: string) => Promise<Advancement[]>;
+    searchAdvancementQuery: (query: string) => Promise<Achievement[]>;
 };
 
 export const AdminContext = createContext<AdminContextType | undefined>(undefined)
@@ -22,26 +21,16 @@ AdminContext.displayName = "AdminContext";
 
 export const AdminProvider= ({children} : {children:ReactNode}) => {
 
-    const [players, setPlayers] = useState<any>([])
-
-    const [mods, setMods] = useState<Mod[] | null>(null)
     const [currentMod, setCurrentMod] = useState<Mod | null>( null )
 
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
     const [latestVersion, setLatestVersion] = useState<string | null>(null)
 
-    const fetchPlayers = async () => {
-        const url = "/api/players";
-        let res = await fetch(`${url}`);
-        const json = await res.json();
-
-        setPlayers([json]);
-    }
 
     const fetchMods = async () => {
 
         let modList = await getMods()
-        setMods(modList);
+        console.log("List", modList)
         return modList;
     }
 
@@ -61,7 +50,7 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
         let res = await fetch(`${url}`);
         const json = await res.json();
 
-       return json.data as Advancement[];
+       return json.data as Achievement[];
     }
 
     const fectchLastJarURL = async () => {
@@ -81,17 +70,16 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
 
 
     useEffect(() => {
-        fetchPlayers()
         fectchLastJarURL()
     }, []);
 
 
     const searchAdvancementQuery = async (query:string) => {
-        const url = `/api/advancements/search/${query}`;
+        const url = `/api/advancements/search?q=${query}`;
         let res = await fetch(`${url}`);
         const json = await res.json();
 
-        return json.data as Advancement[];
+        return json.data as Achievement[];
     }
 
 
@@ -99,8 +87,6 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
     return (
         <AdminContext.Provider value={
             {
-                players,
-                mods,
                 fetchMods,
                 currentMod,
                 setCurrentMod,

@@ -1,25 +1,28 @@
 import React, {ReactNode, useEffect, useRef, useState} from "react";
-import {cn} from "@/utils/Utils";
+import {cn} from "@/libs/Utils";
 import {set} from "zod";
 import {useAdmin} from "@/contexts/AdminContext";
 import Link from "next/link";
 import advancements from "@/pages/advancements";
 import {useRouter} from "next/router";
 import {useUI} from "@/contexts/UIContext";
+import {Achievement} from "@prisma/client";
 
 interface Choice {
     name: string,
-    callback: () => void
+    callback: () => void,
+    callbackEvent?: 'click' | 'hover',
     iconSVG?: ReactNode,
     disabled?: boolean
 }
 
-const SearchModal = () => {
+const CommandPalette = () => {
 
-    const [searchedAdvancements, setSearchedAdvancements] = useState<Advancement[]>([])
+    const [searchedAdvancements, setSearchedAdvancements] = useState<Achievement[]>([])
+
     const {searchAdvancementQuery} = useAdmin();
     const router = useRouter()
-    const {closeModal} = useUI();
+    const {closeModal, setModalView} = useUI();
 
 
     const choices = [
@@ -33,8 +36,20 @@ const SearchModal = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>,
             disabled: true
+        }, {
+            name: "Login",
+            callback: (e:any) => {
+                handleLoginView(e)
+            },
+            callbackEvent: 'hover',
+            iconSVG: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>,
+
+            disabled: false
+
         }
-    ]
+    ] as Choice[]
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let search = e.target.value
@@ -49,7 +64,11 @@ const SearchModal = () => {
         if (search.length < 3) setSearchedAdvancements([])
     }
 
-    const handleAdvancementClick = (advancement: Advancement) => {
+    const handleLoginView = (e:any) => {
+        setModalView("LOGIN")
+    }
+
+    const handleAdvancementClick = (advancement: Achievement) => {
         closeModal()
         router.push(`/advancements/${advancement.mod_id}/#${advancement.id}`)
     }
@@ -57,7 +76,7 @@ const SearchModal = () => {
 
 
     return (
-        <div className={"focus:outline-none ring-0 focus:ring-0"}>
+        <div className={"focus:outline-none ring-0 focus:ring-0 relative"}>
             <div className={'w-full h-16 p-2 flex items-center'}>
                 <span className={'p-2'}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -72,7 +91,7 @@ const SearchModal = () => {
                     className={'placeholder-gray-600 dark:placeholder-gray-200 w-full h-full bg-transparent outline-none focus:outline-none ring-0 focus:ring-0 border-none rounded-md'}/>
 
             </div>
-            <div className={'flex flex-col gap-2 outline-none p-2'}>
+            <div className={'flex flex-col gap-2 outline-none p-2 relative'}>
                 {searchedAdvancements.length == 0 && choices.map((choice: Choice, index) => {
                     return (
                         <button key={index}
@@ -89,7 +108,7 @@ const SearchModal = () => {
                         </button>
                     )
                 })}
-                {searchedAdvancements.length > 0 && searchedAdvancements.map((advancement: Advancement) => {
+                {searchedAdvancements.length > 0 && searchedAdvancements.map((advancement: Achievement) => {
                    return (
                        <button className={'flex items-center justify-between gap-2 p-3 rounded-lg transition-all focus:outline-none delay-75 hover:bg-gray-200 hover:dark:bg-gray-600/60'}
                            onClick={() => handleAdvancementClick(advancement)} key={advancement.id}>
@@ -98,7 +117,8 @@ const SearchModal = () => {
                            </span>
                            <div className={'font-semibold h-8 flex items-center space-x-2'}>
                                <span>
-                                   {advancement.mod_name ? advancement.mod_name : advancement.mod_id}
+                                   {/* @ts-ignore */}
+                                   {advancement?.mods?.displayName ? advancement.mods.displayName : advancement.mod_id}
                                </span>
                                <span className={'bg-origin-content bg-center bg-no-repeat bg-contain h-full aspect-square rounded-full'}
                                         style={{backgroundImage: `url(https://cassiusbucket.s3.eu-west-3.amazonaws.com/minecraft/mods/${advancement.mod_id}.png)`}}>
@@ -108,9 +128,14 @@ const SearchModal = () => {
                        </button>
                     )
                 })}
+
+
             </div>
+
+
         </div>
+
     )
 }
 
-export default SearchModal
+export default CommandPalette

@@ -1,5 +1,10 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getConnection} from "@/helpers/DBHelper";
+import {Achievement, PrismaClient} from "@prisma/client";
+
+
+const prisma = new PrismaClient({
+  log: ['query'],
+});;
 
 const handler = async (req:NextApiRequest, res:NextApiResponse) => {
     if(req.method === 'GET') {
@@ -10,41 +15,28 @@ const handler = async (req:NextApiRequest, res:NextApiResponse) => {
 }
 
 const GET = async (req:NextApiRequest, res:NextApiResponse) => {
-    const {mod} = req.query;
+    const {mod} = req.query
 
-    const conn = await getConnection();
+    if (!mod) {
+        return res.status(400).json({ error: 'mod parameter is required' });
+    }
+
 
     try {
-        const query = `SELECT 
-                                a.*,
-                                CASE 
-                                    WHEN COUNT(su_players.uid) = 0 THEN '[]'
-                                    ELSE CONCAT('[', 
-                                        GROUP_CONCAT(
-                                            CONCAT(
-                                                '{\"player_uid\":\"', su_players.uid, 
-                                                '\", \"player_name\":\"', su_players.name, '\"}'
-                                            )
-                                        ), 
-                                        ']'
-                                    )
-                                END AS players
-                            FROM 
-                                su_achievements as a
-                            LEFT JOIN 
-                                su_player_achievements ON a.id = su_player_achievements.achievement_id
-                            LEFT JOIN 
-                                su_players ON su_player_achievements.player_uid = su_players.uid
-                            WHERE 
-                                a.mod_id = '${mod}'
-                            GROUP BY 
-                                a.id;` ;
+        const achievements: Achievement[] = await prisma.achievement.findMany({
+            where: {
+                mod_id: mod as string,
+            },
+            include: {
+                players: {
+                    select: {
+                        player: true,
+                    },
+                },
+            },
+        });
 
-
-
-        const [rows] = await conn.execute(query);
-        conn.end()
-        return res.status(200).json({ data : rows as Advancement[] });
+        return res.status(200).json({ data : achievements as Achievement[] });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });

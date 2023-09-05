@@ -1,33 +1,41 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {getConnection} from "@/helpers/DBHelper";
+import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from '@prisma/client';
 
-const handler = async (req:NextApiRequest, res:NextApiResponse) => {
+const prisma = new PrismaClient({
+  log: ['query'],
+});;
 
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
-        await GET(req, res)
+        await GET(req, res);
+    } else {
+        res.status(405).json({ error: 'Method not allowed' });
+    }
+}
+
+const GET = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { id } = req.query;
+
+    if(id == null) {
+        return res.status(400).json({ error: 'Invalid URL Scheme' });
     }
 
-
-}
-const GET = async (req:NextApiRequest, res:NextApiResponse) => {
-
-    const {id} = req.query;
-    if(id == null) return res.status(400).json({ error: 'Invalid URL Scheme' });
-
-
-    const conn = await getConnection();
-
     try {
-        const query = `SELECT * FROM su_mods WHERE mod_id = '${id}';` ;
-        const [data] = await conn.execute(query) as Array<any>;
-        if (data == null || data.length == 0) return res.status(404).json({ error: 'Mod not found' });
+        const mod = await prisma.mod.findUnique({
+            where: {
+                mod_id: id as string,
+            },
+        });
 
-        conn.end()
-        return res.status(200).json({ data: data[0] });
+        if (!mod) {
+            return res.status(404).json({ error: 'Mod not found' });
+        }
+
+        return res.status(200).json({ data: mod });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });
     }
 }
 
-export default handler
+export default handler;
