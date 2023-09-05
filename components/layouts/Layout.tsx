@@ -2,7 +2,8 @@ import React from 'react';
 import { useUI } from "@/contexts/UIContext";
 import MainFrame from './MainFrame';
 import Modal from './Modal';
-import SearchModal from "@/components/modals/SearchModal";
+import CommandPalette from "@/components/modals/CommandPalette";
+import LoginModal from "@/components/modals/LoginModal";
 
 interface LayoutProps {
 	children: React.ReactNode;
@@ -17,8 +18,9 @@ const Layout = ({ children }: LayoutProps) => {
 		const { closeModal, modalView, displayModal } = useUI()
 		return (
 
-					<Modal onClose={closeModal} style={modalView == "SEARCH" ? "transparent" : "opaque"}>
-						{modalView === "SEARCH" && <SearchModal />}
+					<Modal onClose={closeModal} style={(modalView == "SEARCH" || modalView == "LOGIN") ? "transparent" : "opaque"}>
+						{modalView === "SEARCH" && <CommandPalette />}
+						{modalView === "LOGIN" && <LoginModal />}
 					</Modal>
 		)
 	}

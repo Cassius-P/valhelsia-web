@@ -1,9 +1,10 @@
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useAdmin} from "@/contexts/AdminContext";
-import {cn} from "@/utils/Utils";
+import {cn} from "@/libs/Utils";
 import PlaceholderList from "@/components/mods/PlaceholderList";
 import Link from "next/link";
+import {Mod} from "@prisma/client";
 
 
 interface ModSidebarProps {
@@ -11,11 +12,11 @@ interface ModSidebarProps {
 }
 const ModSidebar = ({mod_id}: ModSidebarProps) => {
 
-    const {mods, fetchMods} = useAdmin()
-    const {} = useAdmin()
+    const {fetchMods} = useAdmin()
+    const [mods, setMods] = useState<Mod[]>([]);
 
     useEffect( () => {
-        fetchMods().then(() => console.log("Fetched mods"))
+        fetchMods().then((mods) => setMods(prev => mods))
     }, []);
 
 
@@ -23,10 +24,10 @@ const ModSidebar = ({mod_id}: ModSidebarProps) => {
     return (
         <div className="dark:bg-gray-600 bg-light-gray-400 w-24 h-screen text-black overflow-y-auto overflow-hidden" id={'vertical-sidebar'}>
 
-            <div className={'grid grid-cols-1 gap-1 p-1 pr-4'}>
-                {mods && mods.map((mod:Mod) => (
+            <nav className={'grid grid-cols-1 gap-1 p-1 pr-4'}>
+                {mods && mods.map((mod:Mod, index) => (
                     <Link href={`/advancements/${mod.mod_id}`}
-                        key={mod.mod_id} className="flex items-center w-full p-2 justify-center">
+                        key={index} className="flex items-center w-full p-2 justify-center">
 
                         <div className={
                             cn('w-full aspect-square dark:bg-gray-700 bg-light-gray-700 rounded-full flex p-1 cursor-pointer hover:dark:bg-gray-500 hover:bg-[#b9b9b9]',
@@ -53,7 +54,7 @@ const ModSidebar = ({mod_id}: ModSidebarProps) => {
                 )}
 
 
-            </div>
+            </nav>
         </div>
     )
 }
