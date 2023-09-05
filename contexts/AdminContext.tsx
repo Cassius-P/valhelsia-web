@@ -1,5 +1,4 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {useRouter} from "next/router";
 import {getMod, getMods} from "@/helpers/APIHelper";
 
 
@@ -11,10 +10,10 @@ type AdminContextType = {
     currentMod: Mod | null;
     setCurrentMod: (mod: Mod | null) => void;
     findMod: (mod_id: string) => Promise<Mod | null>;
-    advancements: Advancement[];
-    fetchAdvancements: (mod_id: string) => void;
+    fetchAdvancements: (mod_id: string) => Promise<Advancement[]>;
     downloadUrl: string | null;
     latestVersion: string | null;
+    searchAdvancementQuery: (query: string) => Promise<Advancement[]>;
 };
 
 export const AdminContext = createContext<AdminContextType | undefined>(undefined)
@@ -23,15 +22,10 @@ AdminContext.displayName = "AdminContext";
 
 export const AdminProvider= ({children} : {children:ReactNode}) => {
 
-    const router = useRouter()
-
     const [players, setPlayers] = useState<any>([])
 
     const [mods, setMods] = useState<Mod[] | null>(null)
     const [currentMod, setCurrentMod] = useState<Mod | null>( null )
-
-    const [advancements, setAdvancements] = useState<Advancement[]>([])
-
 
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
     const [latestVersion, setLatestVersion] = useState<string | null>(null)
@@ -67,7 +61,7 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
         let res = await fetch(`${url}`);
         const json = await res.json();
 
-        setAdvancements(json.data as Advancement[]);
+       return json.data as Advancement[];
     }
 
     const fectchLastJarURL = async () => {
@@ -91,13 +85,14 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
         fectchLastJarURL()
     }, []);
 
-    useEffect(() => {
 
-        if(currentMod) {
-            fetchAdvancements(currentMod.mod_id)
-            router.push(`/advancements/${currentMod.mod_id}`)
-        }
-    }, [currentMod]);
+    const searchAdvancementQuery = async (query:string) => {
+        const url = `/api/advancements/search/${query}`;
+        let res = await fetch(`${url}`);
+        const json = await res.json();
+
+        return json.data as Advancement[];
+    }
 
 
 
@@ -110,10 +105,10 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
                 currentMod,
                 setCurrentMod,
                 findMod,
-                advancements,
                 fetchAdvancements,
                 downloadUrl,
-                latestVersion
+                latestVersion,
+                searchAdvancementQuery
             }
         }>
             {children}

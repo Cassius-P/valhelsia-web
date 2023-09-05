@@ -22,7 +22,8 @@ const GET = async (req:NextApiRequest, res:NextApiResponse) => {
         const [data] = await conn.execute(query) as Array<any>;
         if (data == null || data.length == 0) return res.status(404).json({ error: 'Mod not found' });
 
-        res.status(200).json({ data: data[0] });
+        conn.end()
+        return res.status(200).json({ data: data[0] });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });

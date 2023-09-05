@@ -1,9 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {getConnection} from "@/helpers/DBHelper";
 
-interface AchievementID {
-    id: string;
-}
+
 
 const handler = async (req: NextApiRequest, res:NextApiResponse) => {
 
@@ -44,7 +42,6 @@ const handlePOST = async (req: NextApiRequest, res:NextApiResponse) => {
             return res.status(500).json({ error: 'An error occurred' });
         } finally {
             await conn.end();
-
         }
     }
 

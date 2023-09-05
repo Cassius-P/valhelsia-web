@@ -8,7 +8,7 @@ export interface UIState {
 
 const initialState = {
   displayModal: false,
-  modalView: "UPLOAD",
+  modalView: "SEARCH",
 }
 
 type Action = 
@@ -23,9 +23,8 @@ type Action =
     view: VIEWS
   }
 
-type VIEWS = 
-  | "UPLOAD"
-  | "CREATE_REFERENCE"
+type VIEWS =
+  | "SEARCH"
 
 export const UIContext = createContext<UIState | any>(initialState)
 UIContext.displayName = "UIContext";
