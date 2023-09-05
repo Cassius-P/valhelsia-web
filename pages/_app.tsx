@@ -7,12 +7,14 @@ import {ManagedUIContext} from "@/contexts/UIContext";
 import '../styles/globals.css'
 import {Tooltip} from "react-tooltip";
 import {KeyboardHandler} from "@/contexts/KeyboardContext";
+import {UserProvider} from "@/contexts/UserContext";
 function App({Component, pageProps}: AppProps) {
 
 
 
 
     return (
+        <UserProvider>
             <ManagedUIContext>
                 <AdminProvider>
                     <KeyboardHandler>
@@ -27,6 +29,7 @@ function App({Component, pageProps}: AppProps) {
                     </KeyboardHandler>
                 </AdminProvider>
             </ManagedUIContext>
+        </UserProvider>
     )
 }
 
