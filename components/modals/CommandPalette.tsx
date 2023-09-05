@@ -1,12 +1,10 @@
-import React, {ReactNode, useEffect, useRef, useState} from "react";
+import React, {ReactNode, useState} from "react";
 import {cn} from "@/libs/Utils";
-import {set} from "zod";
 import {useAdmin} from "@/contexts/AdminContext";
-import Link from "next/link";
-import advancements from "@/pages/advancements";
 import {useRouter} from "next/router";
 import {useUI} from "@/contexts/UIContext";
 import {Achievement} from "@prisma/client";
+import {useUser} from "@/contexts/UserContext";
 
 interface Choice {
     name: string,
@@ -23,6 +21,7 @@ const CommandPalette = () => {
     const {searchAdvancementQuery} = useAdmin();
     const router = useRouter()
     const {closeModal, setModalView} = useUI();
+    const {isUserConnected} = useUser();
 
 
     const choices = [
@@ -37,8 +36,15 @@ const CommandPalette = () => {
                     </svg>,
             disabled: true
         }, {
-            name: "Login",
+            name: !isUserConnected ? "Login" : "Logout",
             callback: (e:any) => {
+                if (isUserConnected) {
+                    fetch('/api/auth/logout', {method:'POST'}).then(async res => {
+                      if (res.ok) {
+                          console.log("User logged out")
+                      }
+                    })
+                }
                 handleLoginView(e)
             },
             callbackEvent: 'hover',
@@ -47,7 +53,6 @@ const CommandPalette = () => {
                     </svg>,
 
             disabled: false
-
         }
     ] as Choice[]
 
