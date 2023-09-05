@@ -13,14 +13,14 @@ export const generateJWT = (user: UserPayload): string => {
     });
 };
 
-export const setAuthCookie = (res: NextApiResponse, token: string): void => {
+export const setAuthCookie = (res: NextApiResponse, token: string, kill:boolean): void => {
     res.setHeader(
         'Set-Cookie',
         serialize(process.env.COOKIE_NAME!, token, {
             httpOnly: false,
             secure: true,
             sameSite: 'lax',
-            maxAge: 3600 * 24 * 7,
+            maxAge: !kill ? 3600 * 24 * 7 : 0,
             path: '/',
         })
     );

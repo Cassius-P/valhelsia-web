@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
+import {setAuthCookie} from "@/libs/Auth";
 
 
 const COOKIE_NAME = process.env.COOKIE_NAME!;
@@ -25,15 +26,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        // Verify the token
         const decoded = jwt.verify(token, JWT_SECRET);
-
-        console.log("decoded", decoded);
-
-
+        console.log("decoded", decoded)
+        if(typeof decoded === 'string') {
+            throw new Error('Invalid JWT');
+        }
 
         res.status(200).json({ status: "connected" });
     } catch (err) {
+        setAuthCookie(res, "", true)
         res.status(401).json({ error: 'Token is either invalid or expired' });
     }
 }

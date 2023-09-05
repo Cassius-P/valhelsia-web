@@ -1,8 +1,6 @@
-import { serialize } from 'cookie';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import {setAuthCookie} from "@/libs/Auth";
 
-const COOKIE_NAME = process.env.COOKIE_NAME!;
-const JWT_SECRET = process.env.JWT_SECRET!;
 
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -10,13 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).end();
     }
 
-    res.setHeader(
-        'Set-Cookie',
-        serialize(COOKIE_NAME, '', {
-            maxAge: 0,
-            path: '/',
-        })
-    );
+    setAuthCookie(res, "", true)
 
     return res.status(200).json({ success: true });
 };

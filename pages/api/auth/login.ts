@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const token = generateJWT({ id: user.id, email: user.email });
-    setAuthCookie(res, token);
+    setAuthCookie(res, token, false);
 
     return res.status(200).json({ success: true });
 };
