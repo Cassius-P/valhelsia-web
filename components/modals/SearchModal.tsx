@@ -96,7 +96,7 @@ const SearchModal = () => {
                            <span>
                                {advancement.title}
                            </span>
-                           <div className={'font-semibold h-full h-10 flex items-center space-x-2'}>
+                           <div className={'font-semibold h-8 flex items-center space-x-2'}>
                                <span>
                                    {advancement.mod_name ? advancement.mod_name : advancement.mod_id}
                                </span>
