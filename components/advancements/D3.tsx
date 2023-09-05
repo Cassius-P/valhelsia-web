@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import {D3DragEvent} from "d3";
-import {cn} from "@/utils/Utils";
+import {cn} from "@/libs/Utils";
+import {Achievement} from "@prisma/client";
 
 
 
 type TreeComponentProps = {
-    trees: Advancement[];
+    trees: Achievement[];
     targetID: string | null;
 };
 
@@ -14,7 +15,7 @@ type TreeComponentProps = {
 
 const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
     const ref = useRef(null);
-    const getNodeHTML = (advancement: Advancement) => {
+    const getNodeHTML = (advancement: Achievement) => {
         let nodeColor = 'bg-light-gray-600 dark:bg-gray-600 hover:bg-light-gray-800 hover:dark:bg-gray-700';
         if(!advancement.parent_id) {
             nodeColor = 'bg-green-600  hover:bg-green-700 text-white';
@@ -26,12 +27,15 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
 
 
 
+        // @ts-ignore
         if(advancement.players && advancement.players.length > 0) {
             let content = ''
-            for(let player of JSON.parse(advancement.players.toString())) {
 
-                if(player.player_uid == null) continue;
-                content += `<img class="aspect-square h-6" src="https://crafatar.com/avatars/${player.player_uid}" alt={player.player_uid}/>`
+            // @ts-ignore
+            for(let item of advancement.players) {
+
+                if(item.player.uid == null) continue;
+                content += `<img class="aspect-square h-6" src="https://crafatar.com/avatars/${item.player.uid}" alt={item.player.uid}/>`
             }
 
             if(content !== '') {

@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Achievement {
+  id           String       @id
+  title        String
+  description  String?
+  icon         String?
+  parent_id    String?
+  mod_id        String
+  image_base64  String?
+  mods         Mod          @relation(fields: [mod_id], references: [mod_id])
+  players    PlayerAch[]
+
+  @@map("su_achievements")
+}
+
+model Mod {
+  mod_id       String       @id
+  displayName String?
+  description String?
+  achievements Achievement[]
+
+  @@map("su_mods")
+}
+
+model Player {
+  uid         String      @id
+  name        String
+  achievements   PlayerAch[]
+
+  @@map("su_players")
+}
+
+model PlayerAch {
+  player_uid      String     @id
+  achievement_id  String
+  created_at      DateTime?
+  player         Player     @relation(fields: [player_uid], references: [uid])
+  achievement    Achievement @relation(fields: [achievement_id], references: [id])
+
+  @@map("su_player_achievements")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String?
+
+  @@map("su_users")
+}
