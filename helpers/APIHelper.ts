@@ -7,9 +7,7 @@ const getMods = async () => {
     const res = await fetch(`${NEXT_PUBLIC_URL}/api/mods`);
     const data = await res.json();
 
-    console.log("get Mods", data)
-
-    return data.data[0] as Mod[];
+    return data.data;
 }
 
 const getMod = async (mod_id: string) => {
@@ -17,7 +15,7 @@ const getMod = async (mod_id: string) => {
     const res = await fetch(url);
     const data = await res.json();
 
-    console.log("Data APIHelper", data)
+    console.log("Data APIHelper Get Mod", data)
     return data
 }
 export {getMods, getMod}

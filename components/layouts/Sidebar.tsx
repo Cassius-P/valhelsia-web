@@ -4,11 +4,13 @@ import Link from "next/link";
 import React from "react";
 import {useUI} from "@/contexts/UIContext";
 import {useAdmin} from "@/contexts/AdminContext";
+import {useUser} from "@/contexts/UserContext";
 
 const Sidebar = () => {
 
     const {lightMode, setTheme, mounted} = useUI()
     const {downloadUrl, latestVersion} = useAdmin()
+    const {isUserConnected} = useUser();
 
 
 
@@ -49,6 +51,17 @@ const Sidebar = () => {
                         </div>
                     )}
                 </div>
+
+                { isUserConnected && (
+                    <div data-tooltip-id={'general-tip'} data-tooltip-place={'right'} data-tooltip-content={`Admin Dashboard`} className={'group'}>
+                        <Link href={'/admin'}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                            </svg>
+                        </Link>
+                    </div>
+                )}
+
 
 
                 <div>

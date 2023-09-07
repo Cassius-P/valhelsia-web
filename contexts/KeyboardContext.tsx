@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useEffect} from "react";
 import {useUI} from "@/contexts/UIContext";
-import {registerShortcuts} from "@/utils/KeyboardShortcutHandler";
+import {registerShortcuts} from "@/libs/KeyboardShortcutHandler";
 
 export const KeyboardContext = createContext<any>({})
 KeyboardContext.displayName = "KeyboardContext";

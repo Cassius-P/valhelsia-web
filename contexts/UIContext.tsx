@@ -25,6 +25,7 @@ type Action =
 
 type VIEWS =
   | "SEARCH"
+  | "LOGIN"
 
 export const UIContext = createContext<UIState | any>(initialState)
 UIContext.displayName = "UIContext";
