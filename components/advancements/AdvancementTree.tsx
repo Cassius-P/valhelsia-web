@@ -1,6 +1,7 @@
 import {useAdmin} from "@/contexts/AdminContext";
 import React, {useEffect, useState} from "react";
 import D3 from "@/components/advancements/D3";
+import {Achievement, Mod} from "@prisma/client";
 
 interface AdvancementTreeProps {
     mod: Mod
@@ -9,7 +10,7 @@ interface AdvancementTreeProps {
 const AdvancementTree = ({mod, targetID} : AdvancementTreeProps) => {
 
     const {fetchAdvancements} = useAdmin()
-    const [advancements, setAdvancements] = useState<Advancement[] | null>(null);
+    const [advancements, setAdvancements] = useState<Achievement[] | null>(null);
 
     useEffect(() => {
         fetchAdvancements(mod.mod_id).then((advancements) => {
