@@ -54,7 +54,10 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
         }
 
         let escapedTitle = advancement.title.replaceAll("'", "&apos;").replaceAll('"', "&quot;");
-        let escapedDescription = advancement.description.replaceAll("'", "&apos;").replaceAll('"', "&quot;");
+        let escapedDescription = advancement.description ? advancement.description
+            .replaceAll("'", "&apos;")
+            .replaceAll('"', "&quot;")
+            : "";
 
         let tooltipHtml = `<div class="flex flex-col w-60">
                         <div class="flex space-x-4 items-center">
@@ -113,7 +116,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
 
 
 
-            const dragstarted = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement) => {
+            const dragstarted = (event: D3DragEvent<SVGElement, Achievement, unknown>, d: Achievement) => {
                 // @ts-ignore
                 currentTreeId = d.treeId;
                 if (!event.active) simulation.alphaTarget(0.1).restart();
@@ -123,7 +126,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
                 d.fy = d.y;
             }
 
-            const dragged = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement) => {
+            const dragged = (event: D3DragEvent<SVGElement, Achievement, unknown>, d: Achievement) => {
 
                 // @ts-ignore
                 if (d.treeId === currentTreeId) {
@@ -134,7 +137,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
                 }
             }
 
-            const dragended = (event: D3DragEvent<SVGElement, Advancement, unknown>, d: Advancement)=> {
+            const dragended = (event: D3DragEvent<SVGElement, Achievement, unknown>, d: Achievement)=> {
                 currentTreeId = null;
                 if (!event.active) simulation.alphaTarget(0).restart();
                 // @ts-ignore
@@ -143,7 +146,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
                 d.fy = null;
             }
 
-            const drag = d3.drag<SVGForeignObjectElement, Advancement>()
+            const drag = d3.drag<SVGForeignObjectElement, Achievement>()
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended);
@@ -174,7 +177,7 @@ const D3: React.FC<TreeComponentProps> = ({ trees, targetID }) => {
             const nodeById = new Map(trees.map((node) => [node.id, node]));
             const links = trees
                 .filter((t) => t.parent_id)
-                .map((t) => ({ source: nodeById.get(t.parent_id), target: nodeById.get(t.id) }))
+                .map((t) => ({ source: nodeById.get(t.parent_id!), target: nodeById.get(t.id) }))
                 .filter((link) => link.source && link.target);
 
             // @ts-ignore
