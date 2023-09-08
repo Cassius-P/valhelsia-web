@@ -5,7 +5,7 @@ import {Achievement, Mod} from "@prisma/client";
 
 
 type AdminContextType = {
-    fetchMods: () => Promise<Mod[]>;
+    //fetchMods: () => Promise<Mod[]>;
     currentMod: Mod | null;
     setCurrentMod: (mod: Mod | null) => void;
     findMod: (mod_id: string) => Promise<Mod | null>;
@@ -27,12 +27,19 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
     const [latestVersion, setLatestVersion] = useState<string | null>(null)
 
 
-    const fetchMods = async () => {
+    /*const fetchMods = async () => {
 
-        let modList = await getMods()
-        console.log("List", modList)
-        return modList;
-    }
+        const mods = await prisma.mod.findMany({
+            select: {
+                mod_id: true,
+                displayName: true,
+                description: true,
+            },
+            orderBy: {
+                displayName: 'asc',
+            },
+        });
+    }*/
 
     const findMod = async (mod_id:string) => {
 
@@ -87,7 +94,7 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
     return (
         <AdminContext.Provider value={
             {
-                fetchMods,
+                //fetchMods,
                 currentMod,
                 setCurrentMod,
                 findMod,

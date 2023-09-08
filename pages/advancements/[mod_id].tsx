@@ -3,14 +3,15 @@ import {useAdmin} from "@/contexts/AdminContext";
 import ModSidebar from "@/components/mods/ModSidebar";
 import AdvancementTree from "@/components/advancements/AdvancementTree";
 import {GetServerSidePropsContext} from "next";
-import {getMod} from "@/helpers/APIHelper";
+import {getMod, getMods} from "@/helpers/APIHelper";
 import {useRouter} from "next/router";
 import {Mod} from "@prisma/client";
 
 type AdvancementsProps = {
     mod: Mod
+    mods: Mod[]
 }
-const Advancements = ({mod}: AdvancementsProps) => {
+const Advancements = ({mod, mods}: AdvancementsProps) => {
 
     const {setCurrentMod} = useAdmin()
     const router = useRouter()
@@ -47,7 +48,7 @@ const Advancements = ({mod}: AdvancementsProps) => {
         <div className="flex w-full h-full">
 
             {/* Header - Vertical Scroll */}
-            <ModSidebar mod_id={mod.mod_id}/>
+            <ModSidebar mod_id={mod.mod_id} mods={mods}/>
 
             {/* Content - Horizontal Scroll */}
             <div className="h-full dark:bg-gray-500 bg-light-gray-200 overflow-x-auto whitespace-nowrap grow relative" id={'horizontal-container'}>
@@ -94,7 +95,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         }
     }
 
-    return { props: { mod } }
+    let mods = await getMods()
+    if(mods == null) {
+        mods = []
+    }
+
+    console.log(mods)
+
+    return { props: { mod, mods } }
 }
 
 

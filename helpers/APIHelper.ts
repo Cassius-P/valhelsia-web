@@ -10,10 +10,24 @@ const prisma = new PrismaClient({
 
 
 const getMods = async () => {
-    const res = await fetch(`${NEXT_PUBLIC_URL}/api/mods`);
-    const data = await res.json();
+    console.log("get mods")
+    try {
+        const mods = await prisma.mod.findMany({
+            select: {
+                mod_id: true,
+                displayName: true,
+                description: true,
+            },
+            orderBy: {
+                displayName: 'asc',
+            },
+        });
+        return mods
+    }catch (e) {
+        console.error(e)
+        return null;
+    }
 
-    return data.data;
 }
 
 const getMod = async (mod_id: string) => {
@@ -26,8 +40,9 @@ const getMod = async (mod_id: string) => {
         });
 
         return mod
-    }catch {
-
+    }catch (e) {
+        console.error(e)
+        return null;
     }
 
 
