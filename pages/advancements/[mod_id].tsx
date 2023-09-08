@@ -87,13 +87,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
 
     const mod = await getMod(mod_id.toString())
-    if(mod == null || mod.error) {
+    if(mod == null) {
+        console.log("Mod not found")
         return {
             notFound: true
         }
     }
 
-    return { props: { mod: mod.data } }
+    return { props: { mod } }
 }
 
 

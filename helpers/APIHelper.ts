@@ -1,6 +1,12 @@
-const NEXT_PUBLIC_URL = process.env.NEXT_PUBLIC_URL;
-if (NEXT_PUBLIC_URL == null) throw new Error("NEXT_PUBLIC_URL is not defined");
+import {PrismaClient} from "@prisma/client";
+const NEXT_PUBLIC_URL=process.env.NEXT_PUBLIC_URL;
+if(!NEXT_PUBLIC_URL) {
+    throw new Error("NEXT_PUBLIC_URL is not defined")
+}
 
+const prisma = new PrismaClient({
+    log: ['query'],
+});;
 
 
 const getMods = async () => {
@@ -11,11 +17,20 @@ const getMods = async () => {
 }
 
 const getMod = async (mod_id: string) => {
-    const url = `${NEXT_PUBLIC_URL}/api/mods/${mod_id}`
-    const res = await fetch(url);
-    const data = await res.json();
 
-    console.log("Data APIHelper Get Mod", data)
-    return data
+    try {
+        const mod = await prisma.mod.findUnique({
+            where: {
+                mod_id
+            },
+        });
+
+        return mod
+    }catch {
+
+    }
+
+
+
 }
 export {getMods, getMod}

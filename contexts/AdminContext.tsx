@@ -38,11 +38,11 @@ export const AdminProvider= ({children} : {children:ReactNode}) => {
 
 
         let mod = await getMod(mod_id)
-        if(mod == null || mod["error"]) {
+        if(mod == null) {
             return null;
         }
 
-        return mod.data as Mod
+        return mod as Mod
     }
 
     const fetchAdvancements = async (mod_id:string) => {
