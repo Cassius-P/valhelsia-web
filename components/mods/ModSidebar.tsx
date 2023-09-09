@@ -1,6 +1,5 @@
 
-import React, {useEffect, useState} from "react";
-import {useAdmin} from "@/contexts/AdminContext";
+import React  from "react";
 import {cn} from "@/libs/Utils";
 import PlaceholderList from "@/components/mods/PlaceholderList";
 import Link from "next/link";
@@ -9,17 +8,9 @@ import {Mod} from "@prisma/client";
 
 interface ModSidebarProps {
     mod_id?: string
+    mods: Mod[]
 }
-const ModSidebar = ({mod_id}: ModSidebarProps) => {
-
-    const {fetchMods} = useAdmin()
-    const [mods, setMods] = useState<Mod[]>([]);
-
-    useEffect( () => {
-        fetchMods().then((mods) => setMods(prev => mods))
-    }, []);
-
-
+const ModSidebar = ({mod_id, mods}: ModSidebarProps) => {
 
     return (
         <div className="dark:bg-gray-600 bg-light-gray-400 w-24 h-screen text-black overflow-y-auto overflow-hidden" id={'vertical-sidebar'}>
